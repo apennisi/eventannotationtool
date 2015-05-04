@@ -50,3 +50,4 @@ The XML file must have the following format:
 	....
 </dataset>
 ```
+EAT annotate only the **ABNORMAL** events.
