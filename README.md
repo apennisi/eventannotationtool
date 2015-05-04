@@ -38,7 +38,8 @@ XML file (by clicking on _Load XML_).
 
 The XML file must have the following format:
 
-```<?xml version="1.0" encoding="utf-8"?>
+```xml
+<?xml version="1.0" encoding="utf-8"?>
 <dataset>
 	<frame number="8">
 		ABNORMAL
