@@ -61,13 +61,12 @@ BarManager::BarManager(const int &endFrame, const cv::Size &_barsize, QLabel *_a
     arrowPos = cv::Point(barTl.x + arrow->x()/2 + (ratio + 1), arrow->y());
     startArrowPos = arrowPos;
     arrow->move(QPoint(cvRound(arrowPos.x), arrowPos.y));
+    arrow->show();
     intervalCounter = 0;
     abnormal = false;
     cursorCounter = 0;
 
     bigBarCopy = bigBar.clone();
-
-    events.resize(barW);
 }
 
 void BarManager::next(const int &speed)
@@ -79,9 +78,15 @@ void BarManager::next(const int &speed)
             intervalCounter++;
             if(abnormal)
             {
-                events[cvRound(double(intervalCounter) / double(ratio)) + 1]->setAbnormal();
+                //events[cvRound(double(intervalCounter) / double(ratio)) + 1]->setAbnormal();
+                events.push_back(new Event(true));
+            }
+            else
+            {
+                events.push_back(new Event(false));
             }
         }
+
         arrowPos.x = startArrowPos.x + cvRound(double(intervalCounter) / double(ratio)) + 1;
         cursorCounter = cvRound(double(intervalCounter) / double(ratio)) + 1;
     }
@@ -91,7 +96,6 @@ void BarManager::next(const int &speed)
         arrowPos.x = startArrowPos.x + intervalCounter/ratio - ratio;
         cursorCounter = cvRound(double(intervalCounter) / double(ratio)) - ratio;
     }
-
     arrow->move(QPoint(cvRound(arrowPos.x), arrowPos.y));
     bar = cv::Scalar(0, 255, 0);
     drawBar();
@@ -150,7 +154,7 @@ void BarManager::drawBar()
 {
     for(size_t i = 0; i < events.size(); ++i)
     {
-        if(events[i]->getAbnormal() == true)
+        if(events[i]->getAbnormal())
         {
             cv::rectangle(bar, cv::Rect(i, 0, cursor.cols, cursor.rows),
                           cv::Scalar(0, 0, 255), -1);
